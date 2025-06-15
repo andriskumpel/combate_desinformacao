@@ -123,6 +123,6 @@ Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICE
 
 ## Contato
 
-Seu Nome - [@seu_twitter](https://twitter.com/seu_twitter) - email@exemplo.com
+Andris Kümpel - [@dikkopel](https://x.com/dikkopel) - andrisivankumpel@gmail.com
 
-Link do Projeto: [https://github.com/seu-usuario/combate_desinformacao](https://github.com/seu-usuario/combate_desinformacao) 
+Link do Projeto: [https://github.com/andriskumpel/combate_desinformacao](https://github.com/andriskumpel/combate_desinformacao) 
