@@ -126,3 +126,17 @@ Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICE
 Andris Kümpel - [@dikkopel](https://x.com/dikkopel) - andrisivankumpel@gmail.com
 
 Link do Projeto: [https://github.com/andriskumpel/combate_desinformacao](https://github.com/andriskumpel/combate_desinformacao) 
+
+# MongoDB settings
+MONGODB_URL=mongodb://localhost:27017
+DATABASE_NAME=fact_checker
+
+# Social Media API Keys (optional)
+TWITTER_API_KEY=
+TWITTER_API_SECRET=
+TWITTER_ACCESS_TOKEN=
+TWITTER_ACCESS_TOKEN_SECRET=
+
+# AI Model Settings
+MODEL_PATH=models
+CONFIDENCE_THRESHOLD=0.85 

@@ -4,8 +4,11 @@ from pydantic import BaseModel
 from app.services.analyzer import ContentAnalyzer
 from app.services.classifier import ContentClassifier
 from app.core.config import settings
+from app.repositories.verification import VerificationRepository
+from app.models.database import VerificationCreate, VerificationInDB
 
 router = APIRouter()
+verification_repository = VerificationRepository()
 
 class VerificationRequest(BaseModel):
     content: str
@@ -23,6 +26,14 @@ class VerificationResponse(BaseModel):
 @router.post("/verify", response_model=VerificationResponse)
 async def verify_content(request: VerificationRequest):
     try:
+        # Create verification record
+        verification = VerificationCreate(
+            content=request.content,
+            content_type=request.content_type,
+            source_url=request.source_url
+        )
+        verification_db = await verification_repository.create(verification)
+        
         # Initialize analyzer and classifier
         analyzer = ContentAnalyzer()
         classifier = ContentClassifier()
@@ -36,8 +47,18 @@ async def verify_content(request: VerificationRequest):
         # Classify content
         classification_result = await classifier.classify(analysis_result)
         
+        # Update verification record with results
+        await verification_repository.update(
+            verification_db.id,
+            VerificationUpdate(
+                analysis_result=analysis_result,
+                classification_result=classification_result,
+                status="completed"
+            )
+        )
+        
         return VerificationResponse(
-            verification_id=analysis_result["id"],
+            verification_id=str(verification_db.id),
             status="completed",
             confidence=classification_result["confidence"],
             classification=classification_result["label"],
@@ -77,6 +98,14 @@ async def verify_file(
         # Read file content
         content = await file.read()
         
+        # Create verification record
+        verification = VerificationCreate(
+            content=str(content),  # Convert bytes to string for storage
+            content_type=content_type,
+            source_url=source_url
+        )
+        verification_db = await verification_repository.create(verification)
+        
         # Initialize analyzer and classifier
         analyzer = ContentAnalyzer()
         classifier = ContentClassifier()
@@ -90,8 +119,18 @@ async def verify_file(
         # Classify content
         classification_result = await classifier.classify(analysis_result)
         
+        # Update verification record with results
+        await verification_repository.update(
+            verification_db.id,
+            VerificationUpdate(
+                analysis_result=analysis_result,
+                classification_result=classification_result,
+                status="completed"
+            )
+        )
+        
         return VerificationResponse(
-            verification_id=analysis_result["id"],
+            verification_id=str(verification_db.id),
             status="completed",
             confidence=classification_result["confidence"],
             classification=classification_result["label"],
@@ -105,5 +144,12 @@ async def verify_file(
 
 @router.get("/status/{verification_id}")
 async def get_verification_status(verification_id: str):
-    # TODO: Implement status check
-    return {"status": "pending", "message": "Status check not implemented yet"} 
+    verification = await verification_repository.get_by_id(verification_id)
+    if not verification:
+        raise HTTPException(status_code=404, detail="Verification not found")
+    
+    return {
+        "status": verification.status,
+        "analysis_result": verification.analysis_result,
+        "classification_result": verification.classification_result
+    } 

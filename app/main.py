@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse
 from fastapi import Request
 from app.core.config import settings
 from app.api.routes import router as api_router
+from app.core.database import connect_to_mongo, close_mongo_connection
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -30,6 +31,14 @@ templates = Jinja2Templates(directory="app/templates")
 
 # Include API routes
 app.include_router(api_router, prefix=settings.API_V1_STR)
+
+@app.on_event("startup")
+async def startup_db_client():
+    await connect_to_mongo()
+
+@app.on_event("shutdown")
+async def shutdown_db_client():
+    await close_mongo_connection()
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
