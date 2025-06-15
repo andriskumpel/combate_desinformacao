@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de Fatos</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Verificador de Fatos</h1>
+            <p class="subtitle">Verifique a veracidade de informações em tempo real</p>
+        </header>
+
+        <main>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="text">Texto</button>
+                <button class="tab-btn" data-tab="file">Arquivo</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Formulário de Texto -->
+                <form id="textForm" class="form active">
+                    <div class="form-group">
+                        <label for="textContent">Cole o texto para verificar:</label>
+                        <textarea id="textContent" rows="4" placeholder="Cole aqui o texto que deseja verificar..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="textSource">URL da fonte (opcional):</label>
+                        <input type="url" id="textSource" placeholder="https://exemplo.com/artigo">
+                    </div>
+                    <button type="submit" class="btn-primary">Verificar</button>
+                </form>
+
+                <!-- Formulário de Arquivo -->
+                <form id="fileForm" class="form">
+                    <div class="form-group">
+                        <label for="fileContent">Selecione um arquivo:</label>
+                        <div class="file-upload">
+                            <input type="file" id="fileContent" accept="image/*,video/*">
+                            <label for="fileContent" class="file-label">
+                                <span class="file-icon">📁</span>
+                                <span class="file-text">Escolher arquivo</span>
+                            </label>
+                        </div>
+                        <p class="file-info">Formatos suportados: JPG, PNG, GIF, MP4, AVI, MOV</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileSource">URL da fonte (opcional):</label>
+                        <input type="url" id="fileSource" placeholder="https://exemplo.com/imagem">
+                    </div>
+                    <button type="submit" class="btn-primary">Verificar</button>
+                </form>
+            </div>
+
+            <!-- Resultado da Verificação -->
+            <div id="result" class="result hidden">
+                <div class="result-header">
+                    <h2>Resultado da Verificação</h2>
+                    <div class="status-badge" id="statusBadge"></div>
+                </div>
+                <div class="result-content">
+                    <div class="confidence-meter">
+                        <div class="meter-label">Nível de Confiança</div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" id="confidenceFill"></div>
+                        </div>
+                        <div class="meter-value" id="confidenceValue"></div>
+                    </div>
+                    <div class="explanation">
+                        <h3>Explicação</h3>
+                        <p id="explanationText"></p>
+                    </div>
+                    <div class="sources">
+                        <h3>Fontes</h3>
+                        <ul id="sourcesList"></ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Desenvolvido com ❤️ para combater a desinformação</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html> 
